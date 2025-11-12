@@ -4,10 +4,15 @@
 @section('title', $project->title)
 
 @section('breadcrumb')
+@php($category = $project->category)
 <nav class="mb-6 text-xs uppercase tracking-[0.3em] text-slate-500">
     <a href="{{ route('home') }}" class="hover:text-amber-200">{{ __('nav.home') }}</a>
     <span class="mx-2">/</span>
-    <a href="{{ route('categories.show', $project->category) }}" class="hover:text-amber-200">{{ $project->category->name }}</a>
+    @if($category)
+        <a href="{{ route('categories.show', $category) }}" class="hover:text-amber-200">{{ $category->name }}</a>
+    @else
+        <span>{{ __('project.uncategorized') }}</span>
+    @endif
     <span class="mx-2">/</span>
     <span>{{ $project->title }}</span>
 </nav>
@@ -25,7 +30,14 @@
     <aside class="space-y-6">
         <div class="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
             <h2 class="text-sm uppercase tracking-[0.4em] text-slate-300">{{ __('project.meta') }}</h2>
-            <p class="mt-4 text-xs text-slate-400">{{ __('project.category') }}: <a href="{{ route('categories.show', $project->category) }}" class="text-amber-200 hover:text-amber-100">{{ $project->category->name }}</a></p>
+            <p class="mt-4 text-xs text-slate-400">
+                {{ __('project.category') }}:
+                @if($category)
+                    <a href="{{ route('categories.show', $category) }}" class="text-amber-200 hover:text-amber-100">{{ $category->name }}</a>
+                @else
+                    <span>{{ __('project.uncategorized') }}</span>
+                @endif
+            </p>
             <p class="mt-2 text-xs text-slate-400">{{ __('project.created_at') }}: {{ $project->created_at->format('d M Y') }}</p>
         </div>
         <div class="rounded-3xl border border-slate-800 bg-slate-900/70 p-6">
