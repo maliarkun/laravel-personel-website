@@ -12,13 +12,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: __DIR__.'/../routes/health.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Middleware alias'ları (route'larda 'auth', 'admin', 'editorOrAdmin' vs. olarak kullanıyoruz)
         $middleware->alias([
-            'role' => App\Http\Middleware\EnsureUserHasRole::class,
+            'auth'          => \App\Http\Middleware\Authenticate::class,
+            'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+            'role'          => \App\Http\Middleware\EnsureUserHasRole::class,
+            'admin'         => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'editorOrAdmin' => \App\Http\Middleware\EnsureUserIsEditorOrAdmin::class,
         ]);
 
+        // web grubuna locale middleware'ini ekle
         $middleware->web(
             append: [
-                App\Http\Middleware\SetLocale::class,
+                \App\Http\Middleware\SetLocale::class,
             ]
         );
     })
