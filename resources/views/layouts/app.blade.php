@@ -6,7 +6,7 @@
     <title>{{ config('app.name', 'ChronoNotes') }} - @yield('title')</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=rajdhani:400,500,700" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/js/app.js')
 </head>
 <body class="min-h-full bg-slate-950 text-slate-100 font-['Rajdhani']">
     <div class="relative min-h-screen overflow-hidden">
