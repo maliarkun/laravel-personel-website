@@ -22,7 +22,10 @@
                     <a href="{{ route('search') }}" class="hover:text-amber-200 transition">{{ __('nav.search') }}</a>
                     <a href="{{ route('contact.create') }}" class="hover:text-amber-200 transition">{{ __('nav.contact') }}</a>
                     @auth
-                        <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-200 transition">{{ __('nav.dashboard') }}</a>
+                        <a href="{{ route('account.profile.show') }}" class="hover:text-amber-200 transition">{{ __('nav.account') }}</a> {{-- Hesap alanına hızlı erişim --}}
+                        @if(auth()->user()->hasAnyRole(['admin', 'editor']))
+                            <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-200 transition">{{ __('nav.dashboard') }}</a> {{-- Yetkili kullanıcılar için yönetim bağlantısı --}}
+                        @endif
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button class="hover:text-amber-200 transition">{{ __('nav.logout') }}</button>

@@ -14,6 +14,8 @@ return [
     'remember' => 'Remember me',
     'failed' => 'These credentials do not match our records.',
     'unauthorized' => 'You are not authorized to perform this action.',
+    'account_locked' => 'Your account is locked. Please contact support.', // Kilitli hesap hata mesajı.
+    'unlock' => 'Unlock account',
     'verify_email' => 'Verify your email',
     'verify_notice' => 'Please check your inbox for a verification email.',
     'resend' => 'Resend email',

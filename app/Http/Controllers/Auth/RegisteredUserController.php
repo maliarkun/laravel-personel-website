@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -30,13 +31,16 @@ class RegisteredUserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => 'editor',
+            'role' => 'member', // Eski kolon için varsayılan üye rolü.
         ]);
+
+        Role::firstOrCreate(['name' => 'member', 'guard_name' => 'web']);
+        $user->assignRole('member');
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended(route('account.profile.show'));
     }
 }

@@ -30,7 +30,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'));
+        if (Auth::user()->is_locked) {
+            Auth::logout();
+            $request->session()->invalidate(); // Kilitli hesap giriş denemesinde oturum izlerini temizliyoruz.
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'email' => __('auth.account_locked'),
+            ])->onlyInput('email'); // Kilitli hesaplar için ek güvenlik kontrolü.
+        }
+
+        return redirect()->intended(route('account.profile.show')); // Giriş sonrası kullanıcı hesap alanına yönlendiriyoruz.
     }
 
     public function destroy(Request $request): RedirectResponse
