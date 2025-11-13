@@ -40,5 +40,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+        'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class, // Admin özel alanları için kısa yol middleware ekledik.
+        'editorOrAdmin' => \App\Http\Middleware\EnsureUserIsEditorOrAdmin::class, // Editör ve admin ortak alanları.
     ];
 }

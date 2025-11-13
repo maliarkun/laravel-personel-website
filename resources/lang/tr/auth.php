@@ -14,6 +14,8 @@ return [
     'remember' => 'Beni hatırla',
     'failed' => 'Bilgiler eşleşmiyor.',
     'unauthorized' => 'Bu işlem için yetkiniz yok.',
+    'account_locked' => 'Hesabınız kilitli. Lütfen destek ile iletişime geçin.', // Kilitli hesap mesajı.
+    'unlock' => 'Hesabı aç',
     'verify_email' => 'E-postanızı doğrulayın',
     'verify_notice' => 'Doğrulama e-postası için gelen kutunuzu kontrol edin.',
     'resend' => 'Tekrar gönder',

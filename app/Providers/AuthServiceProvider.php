@@ -24,23 +24,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Only admins can fully manage content
         Gate::define('manage-content', function (User $user): bool {
-            return $user->hasRole('admin');
+            return $user->hasRole('admin'); // Yeni rol tablosu ile tam yetkiyi adminlere veriyoruz.
         });
 
-        // Admins + editors can edit content
         Gate::define('edit-content', function (User $user): bool {
-            return $user->hasAnyRole(['admin', 'editor']);
+            return $user->hasAnyRole(['admin', 'editor']); // İçerik düzenleme izni admin ve editörlerle sınırlandı.
         });
 
-        // Super-admin override: this user can do everything
         Gate::before(function (User $user, string $ability) {
-            if ($user->email === 'maliarkun@arkun.net') {
-                return true; // allow all abilities for this user
+            if ($user->hasRole('admin') && $user->email === 'maliarkun@arkun.net') {
+                return true; // Varsayılan admin hesabı için tüm yetkileri saklı tuttuk.
             }
 
-            return null; // continue with normal gate checks for others
+            return null;
         });
     }
 }

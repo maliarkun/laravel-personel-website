@@ -11,4 +11,5 @@ return [
     'delete_description' => 'Hesabınızı silerseniz rol atamalarınız da kaldırılacaktır.',
     'delete_account' => 'Hesabı sil',
     'confirm_delete' => 'Hesabınızı silmek istediğinizden emin misiniz?',
+    'last_login' => 'Son giriş', // Admin tablolarında kullanılır.
 ];

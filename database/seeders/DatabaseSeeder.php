@@ -7,19 +7,12 @@ use App\Models\Note;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Chrono Admin',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-        ]);
-
-        User::factory()->count(3)->create();
+        $this->call(MembershipSeeder::class); // Gelişmiş üyelik verilerini oluştur.
 
         Category::factory()
             ->count(5)
