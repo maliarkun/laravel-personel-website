@@ -29,7 +29,7 @@ class Kernel extends HttpKernel
         ],
     ];
 
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
@@ -39,8 +39,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
         'role' => \App\Http\Middleware\EnsureUserHasRole::class,
-        'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class, // Admin özel alanları için kısa yol middleware ekledik.
-        'editorOrAdmin' => \App\Http\Middleware\EnsureUserIsEditorOrAdmin::class, // Editör ve admin ortak alanları.
+        'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        'editorOrAdmin' => \App\Http\Middleware\EnsureUserIsEditorOrAdmin::class,
     ];
 }
