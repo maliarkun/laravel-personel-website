@@ -10,10 +10,11 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next)
     {
-        // URL parametresi -> session -> varsayılan app.locale sıralaması
+        // URL parametresi -> session -> varsayılan app.locale
         $locale = $request->get('lang', session('locale', config('app.locale')));
 
-        if (! in_array($locale, ['tr', 'en'])) {
+        // Sadece tr ve en'ye izin ver, diğerlerini varsayılan dile çek
+        if (! in_array($locale, ['tr', 'en'], true)) {
             $locale = config('app.locale');
         }
 
