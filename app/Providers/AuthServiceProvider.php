@@ -8,18 +8,39 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    protected $policies = [];
+    /**
+     * The model to policy mappings for the application.
+     *
+     * @var array<class-string, class-string>
+     */
+    protected $policies = [
+        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+    ];
 
+    /**
+     * Register any authentication / authorization services.
+     */
     public function boot(): void
     {
         $this->registerPolicies();
 
-        Gate::define('manage-content', fn (User $user): bool => $user->hasRole('admin'));
+        // Only admins can fully manage content
+        Gate::define('manage-content', function (User $user): bool {
+            return $user->hasRole('admin');
+        });
 
-        Gate::define('edit-content', fn (User $user): bool => $user->hasAnyRole(['admin', 'editor']));
+        // Admins + editors can edit content
+        Gate::define('edit-content', function (User $user): bool {
+            return $user->hasAnyRole(['admin', 'editor']);
+        });
 
-        Gate::before(function ($user, $ability) {
-            if ($user->email === 'maliarkun@arkun.net') { 
+        // Super-admin override: this user can do everything
+        Gate::before(function (User $user, string $ability) {
+            if ($user->email === 'maliarkun@arkun.net') {
+                return true; // allow all abilities for this user
             }
+
+            return null; // continue with normal gate checks for others
+        });
     }
 }
