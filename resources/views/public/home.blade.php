@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@php(use Illuminate\Support\Str;)
 
 @section('title', __('home.title'))
 
@@ -21,7 +20,9 @@
         <a href="{{ route('categories.show', $category) }}" class="group relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/70 p-6 transition hover:border-amber-300/60">
             <div class="absolute -top-20 -right-20 h-48 w-48 rounded-full border border-amber-400/40 opacity-0 transition group-hover:opacity-100"></div>
             <h2 class="text-2xl uppercase tracking-[0.4em] text-amber-100">{{ $category->name }}</h2>
-            <p class="mt-4 text-sm text-slate-300">{{ Str::limit($category->description, 120) }}</p>
+            <p class="mt-4 text-sm text-slate-300">
+                {{ \Illuminate\Support\Str::limit($category->description, 120) }}
+            </p>
             <div class="mt-6 flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-slate-400">
                 <span>{{ trans_choice('home.projects_count', $category->projects_count, ['count' => $category->projects_count]) }}</span>
                 <span>{{ trans_choice('home.notes_count', $category->notes_count, ['count' => $category->notes_count]) }}</span>
