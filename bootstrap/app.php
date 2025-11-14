@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsEditorOrAdmin;
+use App\Http\Middleware\SetLocale;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,21 +18,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: __DIR__.'/../routes/health.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Middleware alias'ları (route'larda 'auth', 'admin', 'editorOrAdmin' vs. olarak kullanıyoruz)
         $middleware->alias([
-            'auth'          => \App\Http\Middleware\Authenticate::class,
-            'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-
-            'role'          => \App\Http\Middleware\EnsureUserHasRole::class,
-            'admin'         => \App\Http\Middleware\EnsureUserIsAdmin::class,
-            'editorOrAdmin' => \App\Http\Middleware\EnsureUserIsEditorOrAdmin::class,
+            'auth' => Authenticate::class,
+            'verified' => EnsureEmailIsVerified::class,
+            'role' => EnsureUserHasRole::class,
+            'admin' => EnsureUserIsAdmin::class,
+            'editorOrAdmin' => EnsureUserIsEditorOrAdmin::class,
         ]);
 
-        // web grubuna locale middleware'ini ekle
         $middleware->web(
             append: [
-                \App\Http\Middleware\SetLocale::class,
-            ]
+                SetLocale::class,
+            ],
         );
     })
     ->withExceptions(function (Exceptions $exceptions) {
