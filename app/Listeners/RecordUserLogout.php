@@ -10,7 +10,9 @@ class RecordUserLogout
     public function handle(Logout $event): void
     {
         if ($event->user) {
-            UserActivityLogger::log($event->user, 'logout', $event->request);
+            $request = request(); // ← Doğru şekilde request alıyoruz
+
+            UserActivityLogger::log($event->user, 'logout', $request);
         }
     }
 }
