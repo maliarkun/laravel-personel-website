@@ -10,12 +10,11 @@ class RecordSuccessfulLogin
     public function handle(Login $event): void
     {
         $user = $event->user;
-
-        $request = $event->request;
+        $request = request(); // ← Laravel global request helper
 
         $user->forceFill([
             'last_login_at' => now(),
-            'last_login_ip' => $request?->ip(),
+            'last_login_ip' => $request->ip(),
         ])->save();
 
         UserActivityLogger::log($user, 'login', $request);
