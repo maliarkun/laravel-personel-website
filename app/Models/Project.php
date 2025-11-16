@@ -28,6 +28,8 @@ class Project extends Model
         'language',
         'pushed_at',
         'created_at',
+        'github_readme',
+        'github_commits',
     ];
 
     protected $casts = [
@@ -36,6 +38,7 @@ class Project extends Model
         'pushed_at' => 'datetime',
         'topics' => 'array',
         'stars' => 'integer',
+        'github_commits' => 'array',
     ];
 
     public function category()
