@@ -1,6 +1,7 @@
 @extends('layouts.app')
-@php(use Illuminate\Support\Str;)
-
+@php
+use Illuminate\Support\Str;
+@endphp
 @php
     $isGithubCategory = $category->slug === 'github-projects';
     $timelineCollection = $isGithubCategory ? ($timelineProjects ?? collect()) : collect();

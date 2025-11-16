@@ -1,6 +1,7 @@
 @extends('layouts.app')
-@php(use Illuminate\Support\Str;)
-
+@php
+use Illuminate\Support\Str;
+@endphp
 @section('title', $project->title)
 
 @section('breadcrumb')
