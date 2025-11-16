@@ -64,7 +64,7 @@
                         $desc  = Str::limit($p->summary ?? $p->description ?? '', 140);
                         $url   = $p->github_url ?? $p->repo_url ?? null;
 
-                        // Tarihi güvenle parse et
+                        // Tarih (son aktivite) – önce pushed_at, sonra updated_at, yoksa created_at
                         $rawDate = $p->pushed_at ?? $p->updated_at ?? $p->created_at;
                         try {
                             $updated = $rawDate ? Carbon::parse($rawDate) : null;
@@ -72,15 +72,19 @@
                             $updated = null;
                         }
 
+                        // Dil
+                        $language = $p->language ?? null;
+
                         // Yıldız sayısını olabildiğince yakala
                         $rawStars = $p->stars
                             ?? $p->stargazers_count
                             ?? $p->stargazers
                             ?? null;
-
                         $stars = is_numeric($rawStars) ? (int) $rawStars : null;
 
-                        $language = $p->language ?? null;
+                        // Fork ve issue sayıları – varsa gösterilecek
+                        $forks  = $p->forks ?? $p->forks_count ?? null;
+                        $issues = $p->open_issues ?? $p->open_issues_count ?? null;
                     @endphp
 
                     <article class="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 hover:border-amber-300/60 transition">
@@ -120,8 +124,15 @@
                             @endif
                         </div>
 
-                        {{-- Meta satırı: dil • yıldız • tarih --}}
-                        <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                        {{-- 1. satır: tarihi öne çıkar --}}
+                        @if($updated)
+                            <div class="mt-4 text-xs font-semibold text-amber-300">
+                                Updated {{ $updated->format('Y-m-d') }}
+                            </div>
+                        @endif
+
+                        {{-- 2. satır: dil • yıldız • forks • issues --}}
+                        <div class="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-400">
                             @if($language)
                                 <span>{{ $language }}</span>
                             @endif
@@ -133,8 +144,12 @@
                                 <span>• ⭐</span>
                             @endif
 
-                            @if($updated)
-                                <span>• {{ $updated->format('Y-m-d') }}</span>
+                            @if(!is_null($forks))
+                                <span>• Forks {{ $forks }}</span>
+                            @endif
+
+                            @if(!is_null($issues))
+                                <span>• Issues {{ $issues }}</span>
                             @endif
                         </div>
                     </article>
