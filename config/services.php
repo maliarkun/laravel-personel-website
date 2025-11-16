@@ -17,4 +17,9 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
         'scheme' => 'https',
     ],
+
+    'github' => [
+        'username' => env('GITHUB_USERNAME', 'maliarkun'),
+        'token' => env('GITHUB_TOKEN'),
+    ],
 ];
