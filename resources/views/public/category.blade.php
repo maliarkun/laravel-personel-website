@@ -44,26 +44,27 @@
         </p>
     </section>
 
-    {{-- GITHUB PROJECT LIST --}}
-    <section class="mt-10">
+    {{-- GITHUB PROJECT LIST (kartlar, sitenin stiline uygun) --}}
+    <section class="mt-10 space-y-6">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+            <span class="uppercase tracking-[0.3em]">{{ __('category.projects') }}</span>
+            <span class="uppercase tracking-[0.3em]">{{ $projects->count() }} repositories</span>
+        </div>
+
         @if($projects->isEmpty())
             <p class="text-sm text-slate-400">
                 Henüz herhangi bir GitHub projesi bulunamadı.
                 Sunucuda <span class="text-amber-200">php artisan github:fetch-projects</span> komutunu çalıştırarak projeleri senkronize edebilirsin.
             </p>
         @else
-            <div class="mb-4 flex items-center justify-between text-xs text-slate-500">
-                <span class="uppercase tracking-[0.3em]">{{ __('category.projects') }}</span>
-                <span class="uppercase tracking-[0.3em]">{{ $projects->count() }} repositories</span>
-            </div>
-
-            <div class="space-y-4">
+            <div class="grid gap-6 md:grid-cols-2">
                 @foreach($projects as $p)
                     @php
                         $title = $p->title ?? $p->name ?? 'Unnamed';
                         $desc  = Str::limit($p->summary ?? $p->description ?? '', 140);
                         $url   = $p->github_url ?? $p->repo_url ?? null;
 
+                        // Tarihi güvenle parse et
                         $rawDate = $p->pushed_at ?? $p->updated_at ?? $p->created_at;
                         try {
                             $updated = $rawDate ? Carbon::parse($rawDate) : null;
@@ -71,53 +72,62 @@
                             $updated = null;
                         }
 
-                        $stars = $p->stars ?? $p->stargazers_count ?? null;
+                        // Yıldız sayısını olabildiğince yakala
+                        $rawStars = $p->stars
+                            ?? $p->stargazers_count
+                            ?? $p->stargazers
+                            ?? null;
+
+                        $stars = is_numeric($rawStars) ? (int) $rawStars : null;
                     @endphp
 
-                    <article class="rounded-2xl border border-slate-800 bg-slate-900/70 px-5 py-4 transition hover:border-amber-300/60 hover:-translate-y-[1px]">
+                    <article class="rounded-3xl border border-slate-800 bg-slate-900/70 p-6 hover:border-amber-300/60 transition">
                         <div class="flex items-start justify-between gap-3">
-                            <div class="space-y-2">
-                                <div class="flex items-center gap-2">
-                                    <h3 class="text-sm font-semibold uppercase tracking-[0.25em] text-amber-100">
-                                        {{ $title }}
-                                    </h3>
-
-                                    {{-- Küçük GitHub simgesi (link) --}}
-                                    @if($url)
-                                        <a href="{{ $url }}" target="_blank" rel="noopener"
-                                           class="text-amber-300 hover:text-amber-100"
-                                           title="GitHub">
-                                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 0C5.37 0 0 5.48 0 12.25c0 5.4 3.44 9.97 8.2 11.59.6.11.82-.27.82-.6 
-                                                    0-.3-.01-1.09-.02-2.14-3.34.75-4.04-1.66-4.04-1.66-.55-1.43-1.34-1.81-1.34-1.81-1.1-.77.08-.76.08-.76 
-                                                    1.22.09 1.86 1.28 1.86 1.28 1.08 1.91 2.82 1.36 3.51 1.04.11-.81.42-1.36.76-1.67-2.67-.31-5.47-1.38-5.47-6.15 
-                                                    0-1.36.46-2.47 1.22-3.34-.12-.32-.53-1.57.12-3.27 0 0 1-.33 3.3 1.27a11.08 11.08 0 0 1 6 0C18 5.3 19 5.63 19 5.63 
-                                                    c.66 1.7.25 2.95.12 3.27a4.91 4.91 0 0 1 1.22 3.34c0 4.79-2.81 5.84-5.49 6.15.43.38.82 1.13.82 2.3 
-                                                    0 1.67-.01 3.01-.01 3.42 0 .33.22.72.83.6A12.27 12.27 0 0 0 24 12.25C24 5.48 18.63 0 12 0z"/>
-                                            </svg>
-                                        </a>
-                                    @endif
-                                </div>
-
+                            <div>
+                                <h3 class="text-xl uppercase tracking-[0.3em] text-amber-100">
+                                    {{ $title }}
+                                </h3>
                                 @if($desc)
-                                    <p class="text-xs text-slate-300 leading-relaxed">
+                                    <p class="mt-2 text-sm text-slate-300">
                                         {{ $desc }}
                                     </p>
                                 @endif
                             </div>
 
                             <div class="flex flex-col items-end gap-1 text-[11px] text-slate-500">
-                                @if(!empty($p->language))
-                                    <span>{{ $p->language }}</span>
+                                {{-- Küçük GitHub ikonu (link) --}}
+                                @if($url)
+                                    <a href="{{ $url }}" target="_blank" rel="noopener"
+                                       class="text-amber-300 hover:text-amber-100"
+                                       title="GitHub">
+                                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0C5.37 0 0 5.48 0 12.25c0 5.4 3.44 9.97 8.2 11.59.6.11.82-.27.82-.6 
+                                                0-.3-.01-1.09-.02-2.14-3.34.75-4.04-1.66-4.04-1.66-.55-1.43-1.34-1.81-1.34-1.81-1.1-.77.08-.76.08-.76 
+                                                1.22.09 1.86 1.28 1.86 1.28 1.08 1.91 2.82 1.36 3.51 1.04.11-.81.42-1.36.76-1.67-2.67-.31-5.47-1.38-5.47-6.15 
+                                                0-1.36.46-2.47 1.22-3.34-.12-.32-.53-1.57.12-3.27 0 0 1-.33 3.3 1.27a11.08 11.08 0 0 1 6 0C18 5.3 19 5.63 19 5.63 
+                                                c.66 1.7.25 2.95.12 3.27a4.91 4.91 0 0 1 1.22 3.34c0 4.79-2.81 5.84-5.49 6.15.43.38.82 1.13.82 2.3 
+                                                0 1.67-.01 3.01-.01 3.42 0 .33.22.72.83.6A12.27 12.27 0 0 0 24 12.25C24 5.48 18.63 0 12 0z"/>
+                                        </svg>
+                                    </a>
                                 @endif
 
-                                @if($stars)
-                                    <span>⭐ {{ $stars }}</span>
-                                @endif
+                                {{-- Dil / yıldız / tarih --}}
+                                <div class="flex flex-col items-end gap-0.5">
+                                    @if(!empty($p->language))
+                                        <span>{{ $p->language }}</span>
+                                    @endif
 
-                                @if($updated)
-                                    <span>{{ $updated->format('Y-m-d') }}</span>
-                                @endif
+                                    {{-- Yıldız mutlaka gösterilsin (sayı yoksa sadece ikon) --}}
+                                    @if($stars !== null && $stars > 0)
+                                        <span>⭐ {{ $stars }}</span>
+                                    @else
+                                        <span>⭐</span>
+                                    @endif
+
+                                    @if($updated)
+                                        <span>{{ $updated->format('Y-m-d') }}</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </article>
