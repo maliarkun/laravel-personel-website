@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PublicSite;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Project;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -29,6 +30,17 @@ class HomeController extends Controller
             'notes.project',
         ]);
 
-        return view('public.category', compact('category'));
+        $timelineProjects = null;
+
+        if ($category->slug === 'github-projects') {
+            $timelineProjects = Project::query()
+                ->where('category_id', $category->id)
+                ->orderByDesc('pushed_at')
+                ->orderByDesc('updated_at')
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        return view('public.category', compact('category', 'timelineProjects'));
     }
 }

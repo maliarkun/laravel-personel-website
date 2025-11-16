@@ -22,6 +22,7 @@ class Project extends Model
         'description',
         'repo_name',
         'repo_url',
+        'github_url',
         'stars',
         'topics',
         'language',
