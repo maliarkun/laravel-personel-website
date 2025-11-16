@@ -8,7 +8,9 @@ $markdownAvailable = method_exists(Str::class, 'markdown') && class_exists(\Leag
 @section('title', $project->title)
 
 @section('breadcrumb')
-@php($category = $project->category)
+@php
+    $category = $project->category;
+@endphp
 <nav class="mb-6 text-xs uppercase tracking-[0.3em] text-slate-500">
     <a href="{{ route('home') }}" class="hover:text-amber-200">{{ __('nav.home') }}</a>
     <span class="mx-2">/</span>
