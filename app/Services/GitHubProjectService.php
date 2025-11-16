@@ -39,6 +39,7 @@ class GitHubProjectService
                     'summary' => $description ?? 'Imported from GitHub',
                     'repo_name' => $repository['name'],
                     'repo_url' => $repository['html_url'],
+                    'github_url' => $repository['html_url'],
                     'stars' => $repository['stargazers_count'] ?? 0,
                     'topics' => $topics,
                     'language' => $repository['language'],

@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProjectTimelineController extends Controller
 {
-    public function index(): View
+    public function index(): RedirectResponse
     {
-        $projects = Project::query()
-            ->whereNotNull('repo_name')
-            ->orderByDesc('pushed_at')
-            ->orderByDesc('updated_at')
-            ->get();
-
-        return view('projects.timeline', [
-            'projects' => $projects,
-        ]);
+        return redirect()
+            ->route('categories.show', ['category' => 'github-projects'])
+            ->setStatusCode(301);
     }
 }
