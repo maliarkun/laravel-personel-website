@@ -18,11 +18,23 @@ class Project extends Model
         'summary',
         'featured_image',
         'category_id',
+        'name',
+        'description',
+        'repo_name',
+        'repo_url',
+        'stars',
+        'topics',
+        'language',
+        'pushed_at',
+        'created_at',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'pushed_at' => 'datetime',
+        'topics' => 'array',
+        'stars' => 'integer',
     ];
 
     public function category()
