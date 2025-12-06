@@ -20,6 +20,11 @@ class DashboardController extends Controller
             'userCount' => User::count(),
             'recentProjects' => Project::latest()->take(5)->get(),
             'recentNotes' => Note::latest()->take(5)->get(),
+            'topSearches' => \App\Models\SearchLog::select('term', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+                ->groupBy('term')
+                ->orderByDesc('count')
+                ->take(5)
+                ->get(),
         ]);
     }
 }

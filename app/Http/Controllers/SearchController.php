@@ -32,6 +32,16 @@ class SearchController extends Controller
                         ->orWhere('content', 'like', "%{$query}%");
                 })
                 ->get();
+
+            // Log the search
+            if (strlen($query) > 2) {
+                \App\Models\SearchLog::create([
+                    'term' => $query,
+                    'ip' => $request->ip(),
+                    'user_id' => auth()->id(),
+                    'results_count' => $projects->count() + $notes->count(),
+                ]);
+            }
         }
 
         return view('public.search', compact('query', 'projects', 'notes'));

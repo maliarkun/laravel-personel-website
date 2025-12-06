@@ -74,6 +74,7 @@ Route::middleware(['auth', 'editorOrAdmin'])->prefix('admin')->name('admin.')->g
     Route::resource('categories', AdminCategoryController::class)->middleware('can:manage-content');
     Route::resource('projects', AdminProjectController::class)->middleware('can:edit-content');
     Route::resource('notes', AdminNoteController::class)->middleware('can:edit-content');
+    Route::resource('social-posts', \App\Http\Controllers\Admin\SocialPostController::class)->middleware('can:manage-content');
 
     Route::get('/recycle-bin', [RecycleBinController::class, 'index'])->middleware('can:manage-content')->name('recycle.index');
     Route::post('/recycle/{type}/{id}/restore', [RecycleBinController::class, 'restore'])->middleware('can:manage-content')->name('recycle.restore');
