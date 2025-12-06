@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, \Spatie\Translatable\HasTranslations;
+
+    public $translatable = ['title', 'description', 'summary'];
 
     protected $fillable = [
         'title',

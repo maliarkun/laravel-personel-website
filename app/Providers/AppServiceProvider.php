@@ -14,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::define('manage-content', fn ($user) => $user->hasRole('admin'));
-        Gate::define('edit-content', fn ($user) => $user->hasAnyRole(['admin', 'editor']));
+        Gate::define('manage-content', fn($user) => $user->hasRole('admin'));
+        Gate::define('edit-content', fn($user) => $user->hasAnyRole(['admin', 'editor']));
+
+        \App\Models\Project::observe(\App\Observers\AutoTranslateObserver::class);
+        \App\Models\Note::observe(\App\Observers\AutoTranslateObserver::class);
     }
 }
