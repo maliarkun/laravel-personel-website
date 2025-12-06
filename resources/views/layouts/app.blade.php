@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,23 +9,37 @@
     <link href="https://fonts.bunny.net/css?family=rajdhani:400,500,700" rel="stylesheet" />
     @vite('resources/js/app.js')
 </head>
-<body class="min-h-full bg-slate-950 text-slate-100 font-['Rajdhani']">
+
+<body
+    class="min-h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-100 font-['Rajdhani'] selection:bg-amber-500 selection:text-white">
     <div class="relative min-h-screen overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl"></div>
-            <div class="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-slate-500/20 blur-3xl"></div>
+        {{-- Anti-Gravity Background Elements --}}
+        <div class="fixed inset-0 pointer-events-none z-0">
+            <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-amber-500/10 blur-[100px] animate-pulse">
+            </div>
+            <div class="absolute bottom-10 right-10 h-[30rem] w-[30rem] rounded-full bg-indigo-500/10 blur-[120px]">
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[40rem] w-[40rem] rounded-full bg-slate-800/20 blur-[100px]">
+            </div>
         </div>
         <header class="relative z-10 border-b border-slate-800/60 backdrop-blur">
             <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-                <a href="{{ route('home') }}" class="text-2xl font-bold tracking-[0.3em] uppercase text-amber-300">{{ config('app.name', 'ChronoNotes') }}</a>
+                <a href="{{ route('home') }}"
+                    class="text-2xl font-bold tracking-[0.3em] uppercase text-amber-300">{{ config('app.name', 'ChronoNotes') }}</a>
                 <div class="flex items-center gap-6 text-sm uppercase tracking-[0.3em]">
                     <a href="{{ route('home') }}" class="hover:text-amber-200 transition">{{ __('nav.home') }}</a>
                     <a href="{{ route('search') }}" class="hover:text-amber-200 transition">{{ __('nav.search') }}</a>
-                    <a href="{{ route('contact.create') }}" class="hover:text-amber-200 transition">{{ __('nav.contact') }}</a>
+                    <a href="{{ route('contact.create') }}"
+                        class="hover:text-amber-200 transition">{{ __('nav.contact') }}</a>
                     @auth
-                        <a href="{{ route('account.profile.show') }}" class="hover:text-amber-200 transition">{{ __('nav.account') }}</a> {{-- Hesap alanına hızlı erişim --}}
+                        <a href="{{ route('account.profile.show') }}"
+                            class="hover:text-amber-200 transition">{{ __('nav.account') }}</a> {{-- Hesap alanına hızlı
+                        erişim --}}
                         @if(auth()->user()->hasAnyRole(['admin', 'editor']))
-                            <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-200 transition">{{ __('nav.dashboard') }}</a> {{-- Yetkili kullanıcılar için yönetim bağlantısı --}}
+                            <a href="{{ route('admin.dashboard') }}"
+                                class="hover:text-amber-200 transition">{{ __('nav.dashboard') }}</a> {{-- Yetkili kullanıcılar
+                            için yönetim bağlantısı --}}
                         @endif
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -37,9 +52,10 @@
                         @foreach(request()->except('lang') as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
-                        <select name="lang" onchange="this.form.submit()" class="bg-slate-900/80 text-amber-200 rounded-full px-3 py-1">
-                            <option value="en" @selected(app()->getLocale()==='en')>EN</option>
-                            <option value="tr" @selected(app()->getLocale()==='tr')>TR</option>
+                        <select name="lang" onchange="this.form.submit()"
+                            class="bg-slate-900/80 text-amber-200 rounded-full px-3 py-1">
+                            <option value="en" @selected(app()->getLocale() === 'en')>EN</option>
+                            <option value="tr" @selected(app()->getLocale() === 'tr')>TR</option>
                         </select>
                     </form>
                 </div>
@@ -57,9 +73,11 @@
             @yield('content')
         </main>
 
-        <footer class="relative z-10 border-t border-slate-800/60 bg-slate-950/80 py-8 text-center text-xs uppercase tracking-[0.3em] text-slate-400">
+        <footer
+            class="relative z-10 border-t border-slate-800/60 bg-slate-950/80 py-8 text-center text-xs uppercase tracking-[0.3em] text-slate-400">
             © {{ date('Y') }} ChronoNotes. {{ __('nav.footer') }}
         </footer>
     </div>
 </body>
+
 </html>
