@@ -9,8 +9,11 @@ class TranslationService
 {
     public function translate(string $text, string $targetLang = 'en'): string
     {
-        // Use config instead of env to ensure caching works, falling back to empty string
-        $apiKey = config('services.gemini.key', '');
+        // Try config first, fallback to env directly just in case
+        $apiKey = config('services.gemini.key');
+        if (empty($apiKey)) {
+            $apiKey = env('GEMINI_API_KEY', '');
+        }
 
         if (empty($apiKey)) {
             Log::warning('TranslationService: GEMINI_API_KEY is missing. Returning original text.');
@@ -21,8 +24,8 @@ class TranslationService
             return '';
         }
 
-        // Hardcoded URL as requested, but using config variable for the key
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' . $apiKey;
+        // Using specific version '001' which is more stable than aliases
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=' . $apiKey;
 
         try {
             // Log the attempt (masking key for security)
