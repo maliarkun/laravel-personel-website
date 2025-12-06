@@ -24,12 +24,12 @@ class TranslationService
             return '';
         }
 
-        // Using specific version '001' which is more stable than aliases
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=' . $apiKey;
+        // Using specific version 'gemini-2.0-flash' as requested
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $apiKey;
 
         try {
-            // Log the attempt (masking key for security)
-            Log::info('Gemini Request Initiated to: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent');
+            // Log the attempt
+            Log::info('Gemini Request Initiated to: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent');
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
