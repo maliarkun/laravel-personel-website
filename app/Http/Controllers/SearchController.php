@@ -22,22 +22,26 @@ class SearchController extends Controller
             $projects = Project::query()
                 ->with('category')
                 ->where(function ($builder) use ($query, $terms) {
-                    $builder->where('title', 'like', "%{$query}%")
-                        ->orWhere('summary', 'like', "%{$query}%")
-                        ->orWhere('description', 'like', "%{$query}%")
-                        ->orWhere('topics', 'like', "%{$query}%"); // Added topics search
-    
-                    foreach ($terms as $term) {
-                        if (strlen($term) > 2) {
-                            $builder->orWhere('title', 'like', "%{$term}%")
-                                ->orWhere('summary', 'like', "%{$term}%");
+                    $term = strtolower($query);
+                    $builder->whereRaw('LOWER(title) LIKE ?', ["%{$term}%"])
+                        ->orWhereRaw('LOWER(summary) LIKE ?', ["%{$term}%"])
+                        ->orWhereRaw('LOWER(description) LIKE ?', ["%{$term}%"])
+                        ->orWhereRaw('LOWER(topics) LIKE ?', ["%{$term}%"]);
+
+                    foreach ($terms as $t) {
+                        if (strlen($t) > 2) {
+                            $t = strtolower($t);
+                            $builder->orWhereRaw('LOWER(title) LIKE ?', ["%{$t}%"])
+                                ->orWhereRaw('LOWER(summary) LIKE ?', ["%{$t}%"])
+                                ->orWhereRaw('LOWER(description) LIKE ?', ["%{$t}%"])
+                                ->orWhereRaw('LOWER(topics) LIKE ?', ["%{$t}%"]);
                         }
                     }
                 })
                 // Weighted ordering: Exact(ish) title match > Summary match > Others
                 ->orderByRaw("CASE 
-                                WHEN title LIKE ? THEN 1 
-                                WHEN summary LIKE ? THEN 2 
+                                WHEN LOWER(title) LIKE ? THEN 1 
+                                WHEN LOWER(summary) LIKE ? THEN 2 
                                 ELSE 3 
                               END", ["%{$query}%", "%{$query}%"])
                 ->orderByDesc('created_at')
@@ -47,19 +51,21 @@ class SearchController extends Controller
             $notes = Note::query()
                 ->with(['category', 'project'])
                 ->where(function ($builder) use ($query, $terms) {
-                    $builder->where('title', 'like', "%{$query}%")
-                        ->orWhere('content', 'like', "%{$query}%");
+                    $term = strtolower($query);
+                    $builder->whereRaw('LOWER(title) LIKE ?', ["%{$term}%"])
+                        ->orWhereRaw('LOWER(content) LIKE ?', ["%{$term}%"]);
 
-                    foreach ($terms as $term) {
-                        if (strlen($term) > 2) {
-                            $builder->orWhere('title', 'like', "%{$term}%")
-                                ->orWhere('content', 'like', "%{$term}%");
+                    foreach ($terms as $t) {
+                        if (strlen($t) > 2) {
+                            $t = strtolower($t);
+                            $builder->orWhereRaw('LOWER(title) LIKE ?', ["%{$t}%"])
+                                ->orWhereRaw('LOWER(content) LIKE ?', ["%{$t}%"]);
                         }
                     }
                 })
                 ->orderByRaw("CASE 
-                                WHEN title LIKE ? THEN 1 
-                                WHEN content LIKE ? THEN 2 
+                                WHEN LOWER(title) LIKE ? THEN 1 
+                                WHEN LOWER(content) LIKE ? THEN 2 
                                 ELSE 3 
                               END", ["%{$query}%", "%{$query}%"])
                 ->orderByDesc('created_at')
