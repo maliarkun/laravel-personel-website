@@ -20,21 +20,26 @@ class AutoTranslateObserver
      */
     public function saving(Model $model): void
     {
-        // Ensure the model acts as Translatable
         if (!property_exists($model, 'translatable')) {
+            Log::info('AutoTranslateObserver: Model not translatable', ['model' => get_class($model)]);
             return;
         }
 
         foreach ($model->translatable as $field) {
             $translations = $model->getTranslations($field);
 
-            // Logic: If TR exists but EN is missing, translate TR -> EN
+            // Check if TR exists and EN is missing
             if (isset($translations['tr']) && !empty($translations['tr']) && !isset($translations['en'])) {
+                Log::info("AutoTranslateObserver: Translating field '{$field}' from TR to EN", ['id' => $model->id]);
+
                 try {
                     $translated = $this->translationService->translate($translations['tr'], 'en');
 
-                    if (!empty($translated)) {
+                    if (!empty($translated) && $translated !== $translations['tr']) {
                         $model->setTranslation($field, 'en', $translated);
+                        Log::info("AutoTranslateObserver: Translated '{$field}' successfully.");
+                    } else {
+                        Log::warning("AutoTranslateObserver: Translation returned empty or identical text.");
                     }
                 } catch (\Exception $e) {
                     Log::error("AutoTranslateObserver Error on field {$field}: " . $e->getMessage());

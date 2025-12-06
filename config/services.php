@@ -22,4 +22,8 @@ return [
         'username' => env('GITHUB_USERNAME', 'maliarkun'),
         'token' => env('GITHUB_TOKEN'),
     ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
 ];
