@@ -24,7 +24,7 @@
                 <div
                     class="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-500 via-purple-500 to-amber-500 opacity-30 blur transition group-hover:opacity-75">
                 </div>
-                <div class="relative flex items-center rounded-full bg-slate-950 border border-slate-800 p-2 shadow-2xl">
+                <div class="relative flex items-center rounded-full bg-slate-950 p-2 shadow-2xl">
                     <input type="search" name="q" placeholder="{{ __('home.search_placeholder') }}"
                         class="w-full bg-transparent px-6 py-3 text-lg text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-0" />
                     <button
