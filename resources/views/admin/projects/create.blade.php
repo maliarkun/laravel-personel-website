@@ -33,6 +33,7 @@
             color: #e2e8f0 !important;
             /* slate-200 */
             border-radius: 0 0 1rem 1rem !important;
+            border-color: #334155 !important;
         }
 
         .ck-toolbar {
@@ -42,8 +43,37 @@
             border-radius: 1rem 1rem 0 0 !important;
         }
 
+        /* Toolbar Icon Colors */
+        .ck.ck-icon {
+            color: #cbd5e1 !important;
+            /* slate-300 */
+        }
+
+        .ck.ck-button {
+            color: #cbd5e1 !important;
+            cursor: pointer !important;
+        }
+
+        .ck.ck-button:hover,
+        .ck.ck-button.ck-on {
+            background-color: #334155 !important;
+            /* slate-700 */
+            color: #f8fafc !important;
+            /* slate-50 */
+        }
+
         .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
             border-color: #334155 !important;
+        }
+
+        /* Dropdowns (Headers, etc.) */
+        .ck.ck-dropdown__panel {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+        }
+
+        .ck.ck-list__item .ck-button:hover {
+            background-color: #334155 !important;
         }
     </style>
     <script>
