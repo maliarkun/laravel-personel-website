@@ -12,21 +12,26 @@ class HomeController extends Controller
     public function index(): View
     {
         $categories = Category::with([
-                'projects' => fn ($q) => $q->latest()->limit(5),
-                'notes' => fn ($q) => $q->latest()->limit(5),
-            ])
+            'projects' => fn($q) => $q->latest()->limit(5),
+            'notes' => fn($q) => $q->latest()->limit(5),
+        ])
             ->withCount(['projects', 'notes'])
             ->orderBy('name')
             ->paginate(6);
 
-        return view('public.home', compact('categories'));
+        $socialPosts = \App\Models\SocialPost::where('is_active', true)
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view('public.home', compact('categories', 'socialPosts'));
     }
 
     public function show(Category $category): View
     {
         $category->load([
-            'projects.notes' => fn ($query) => $query->latest(),
-            'notes' => fn ($query) => $query->latest(),
+            'projects.notes' => fn($query) => $query->latest(),
+            'notes' => fn($query) => $query->latest(),
             'notes.project',
         ]);
 
