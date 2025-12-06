@@ -26,7 +26,7 @@
                 </div>
                 <div class="relative flex items-center rounded-full bg-slate-950 p-2 shadow-2xl">
                     <input type="search" name="q" placeholder="{{ __('home.search_placeholder') }}"
-                        class="w-full bg-transparent px-6 py-3 text-lg text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-0" />
+                        class="w-full bg-transparent border-none px-6 py-3 text-lg text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-0" />
                     <button
                         class="shrink-0 rounded-full bg-amber-500 px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-950 transition hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(251,191,36,0.5)]">
                         {{ __('actions.search') }}
