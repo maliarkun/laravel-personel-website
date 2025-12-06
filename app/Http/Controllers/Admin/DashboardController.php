@@ -25,6 +25,8 @@ class DashboardController extends Controller
                 ->orderByDesc('count')
                 ->take(5)
                 ->get(),
+            'githubLastSync' => \Illuminate\Support\Facades\Cache::get('github_last_sync'),
+            'githubSyncStatus' => \Illuminate\Support\Facades\Cache::get('github_sync_status'),
         ]);
     }
 }

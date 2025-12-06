@@ -37,6 +37,7 @@ class FetchGithubRepos extends Command
         $response = Http::get($url);
 
         if ($response->failed()) {
+            \Illuminate\Support\Facades\Cache::forever('github_sync_status', 'failed');
             $this->error('Failed to fetch data from GitHub.');
             return;
         }
@@ -78,6 +79,9 @@ class FetchGithubRepos extends Command
                 ]
             );
         }
+
+        \Illuminate\Support\Facades\Cache::forever('github_last_sync', now());
+        \Illuminate\Support\Facades\Cache::forever('github_sync_status', 'success');
 
         $this->info('GitHub repositories synced successfully!');
     }
