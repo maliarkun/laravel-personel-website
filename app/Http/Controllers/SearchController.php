@@ -24,8 +24,9 @@ class SearchController extends Controller
                 ->where(function ($builder) use ($query, $terms) {
                     $builder->where('title', 'like', "%{$query}%")
                         ->orWhere('summary', 'like', "%{$query}%")
-                        ->orWhere('description', 'like', "%{$query}%");
-
+                        ->orWhere('description', 'like', "%{$query}%")
+                        ->orWhere('topics', 'like', "%{$query}%"); // Added topics search
+    
                     foreach ($terms as $term) {
                         if (strlen($term) > 2) {
                             $builder->orWhere('title', 'like', "%{$term}%")
