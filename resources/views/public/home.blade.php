@@ -35,84 +35,88 @@
             </form>
         </div>
 
-    </div>
+        {{-- Floating Grid (Categories) --}}
+        <div class="mt-20 grid gap-8 md:grid-cols-2 lg:grid-cols-3 perspective-1000">
+            @foreach($categories as $category)
+                <a href="{{ route('categories.show', $category) }}"
+                    class="group relative overflow-hidden rounded-[2rem] border border-white/5 bg-white/5 p-8 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] hover:bg-white/10 backdrop-blur-sm">
 
-    {{-- Social Gravity Stream --}}
-    @if($socialPosts->isNotEmpty())
-        <div class="mt-24 mb-12">
-            <h2 class="text-center text-sm font-bold uppercase tracking-[0.5em] text-slate-500 mb-10">Signals from Orbit</h2>
+                    {{-- Floating Orb in Card --}}
+                    <div
+                        class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-500/20 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-amber-500/30">
+                    </div>
 
-            <div class="flex flex-wrap justify-center gap-6">
-                @foreach($socialPosts as $post)
-                    <div class="w-full md:w-[22rem] group relative">
-                        <div
-                            class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500">
+                    <div class="relative z-10 flex h-full flex-col justify-between">
+                        <div>
+                            <h2
+                                class="text-3xl font-bold uppercase tracking-[0.2em] text-slate-100 group-hover:text-amber-300 transition-colors">
+                                {{ $category->name }}
+                            </h2>
+                            <div
+                                class="mt-1 h-1 w-12 bg-amber-500/50 transition-all duration-500 group-hover:w-full group-hover:bg-amber-400">
+                            </div>
+                            <p class="mt-6 text-sm leading-relaxed text-slate-400 group-hover:text-slate-200 transition-colors">
+                                {{ \Illuminate\Support\Str::limit($category->description, 140) }}
+                            </p>
                         </div>
-                        <div
-                            class="relative h-full bg-slate-900 rounded-2xl p-6 ring-1 ring-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-500">
 
-                            {{-- Platform Icon/Label --}}
-                            <div class="flex items-center justify-between mb-4">
-                                <span
-                                    class="text-xs font-mono text-slate-400 px-2 py-1 rounded bg-slate-800 uppercase">{{ $post->platform }}</span>
-                                <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <div class="mt-8 flex items-center justify-between border-t border-white/5 pt-6">
+                            <div class="flex gap-4 text-[10px] uppercase tracking-[0.3em] text-slate-500">
+                                <div class="flex items-center gap-2">
+                                    <span class="block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                    {{ trans_choice('home.projects_count', $category->projects_count, ['count' => $category->projects_count]) }}
+                                </div>
                             </div>
-
-                            {{-- Social Content Container --}}
-                            <div class="prose prose-invert prose-sm max-w-none text-slate-300 font-sans">
-                                {!! $post->embed_code !!}
-                            </div>
+                            <span
+                                class="text-amber-500 opacity-0 transition-all duration-300 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0">
+                                &rarr;
+                            </span>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </a>
+            @endforeach
         </div>
-    @endif
 
-    {{-- Floating Grid --}}
-    <div class="mt-20 grid gap-8 md:grid-cols-2 lg:grid-cols-3 perspective-1000">
-        @foreach($categories as $category)
-            <a href="{{ route('categories.show', $category) }}"
-                class="group relative overflow-hidden rounded-[2rem] border border-white/5 bg-white/5 p-8 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] hover:bg-white/10 backdrop-blur-sm">
+        <div class="mt-16 text-center">
+            {{ $categories->links() }}
+        </div>
 
-                {{-- Floating Orb in Card --}}
-                <div
-                    class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-500/20 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-amber-500/30">
-                </div>
+        {{-- Social Gravity Stream (Compact Masonry) --}}
+        @if($socialPosts->isNotEmpty())
+            <div class="mt-32 mb-12">
+                <h2 class="text-center text-sm font-bold uppercase tracking-[0.5em] text-slate-500 mb-10">Signals from Orbit
+                </h2>
 
-                <div class="relative z-10 flex h-full flex-col justify-between">
-                    <div>
-                        <h2
-                            class="text-3xl font-bold uppercase tracking-[0.2em] text-slate-100 group-hover:text-amber-300 transition-colors">
-                            {{ $category->name }}
-                        </h2>
-                        <div
-                            class="mt-1 h-1 w-12 bg-amber-500/50 transition-all duration-500 group-hover:w-full group-hover:bg-amber-400">
-                        </div>
-                        <p class="mt-6 text-sm leading-relaxed text-slate-400 group-hover:text-slate-200 transition-colors">
-                            {{ \Illuminate\Support\Str::limit($category->description, 140) }}
-                        </p>
-                    </div>
+                <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+                    @foreach($socialPosts as $post)
+                        <div class="group relative break-inside-avoid">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500">
+                            </div>
+                            <div
+                                class="relative bg-slate-900 rounded-2xl p-4 ring-1 ring-white/10 overflow-hidden hover:-translate-y-1 transition-transform duration-500">
 
-                    <div class="mt-8 flex items-center justify-between border-t border-white/5 pt-6">
-                        <div class="flex gap-4 text-[10px] uppercase tracking-[0.3em] text-slate-500">
-                            <div class="flex items-center gap-2">
-                                <span class="block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                                {{ trans_choice('home.projects_count', $category->projects_count, ['count' => $category->projects_count]) }}
+                                {{-- Platform Icon/Label --}}
+                                <div class="flex items-center justify-between mb-3 opacity-50 group-hover:opacity-100 transition">
+                                    <span
+                                        class="text-[10px] font-mono text-slate-400 px-1.5 py-0.5 rounded bg-slate-800 uppercase">{{ $post->platform }}</span>
+                                    <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                                </div>
+
+                                {{-- Social Content Container (Compact) --}}
+                                <div
+                                    class="prose prose-invert prose-xs max-w-none text-slate-300 font-sans [&_blockquote]:my-0 [&_iframe]:w-full [&_iframe]:rounded-lg">
+                                    {!! $post->embed_code !!}
+                                </div>
                             </div>
                         </div>
-                        <span
-                            class="text-amber-500 opacity-0 transition-all duration-300 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0">
-                            &rarr;
-                        </span>
-                    </div>
+                    @endforeach
                 </div>
-            </a>
-        @endforeach
-    </div>
+            </div>
+        @endif
 
-    <div class="mt-16 text-center">
-        {{ $categories->links() }}
-    </div>
+        <div class="mt-16 text-center">
+            {{ $categories->links() }}
+        </div>
     </div>
 @endsection
