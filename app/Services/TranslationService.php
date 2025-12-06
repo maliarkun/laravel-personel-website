@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 class TranslationService
 {
     protected string $apiKey;
-    protected string $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+    protected string $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
     public function __construct()
     {
