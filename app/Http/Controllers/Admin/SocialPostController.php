@@ -29,7 +29,7 @@ class SocialPostController extends Controller
 
         SocialPost::create($validated);
 
-        return redirect()->route('admin.social_posts.index')
+        return redirect()->route('admin.social-posts.index')
             ->with('status', 'Social post created successfully.');
     }
 
@@ -48,7 +48,7 @@ class SocialPostController extends Controller
 
         $socialPost->update($validated);
 
-        return redirect()->route('admin.social_posts.index')
+        return redirect()->route('admin.social-posts.index')
             ->with('status', 'Social post updated successfully.');
     }
 
