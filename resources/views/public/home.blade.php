@@ -11,7 +11,7 @@
         {{-- Hero Section --}}
         <div class="py-12 md:py-20 text-center relative z-10">
             <h1
-                class="text-6xl md:text-8xl font-bold uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 drop-shadow-lg motion-safe:animate-bounce-slow">
+                class="text-4xl md:text-6xl font-bold uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 drop-shadow-lg motion-safe:animate-float-gentle">
                 {{ __('home.heading') }}
             </h1>
             <p class="mt-6 mx-auto max-w-2xl text-xl text-slate-400 font-light tracking-wide leading-relaxed">
