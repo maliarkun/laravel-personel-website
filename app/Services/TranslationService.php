@@ -7,17 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 class TranslationService
 {
-    protected string $apiKey;
-    protected string $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
-
-    public function __construct()
-    {
-        $this->apiKey = config('services.gemini.key', '');
-    }
-
     public function translate(string $text, string $targetLang = 'en'): string
     {
-        if (empty($this->apiKey)) {
+        // Use config instead of env to ensure caching works, falling back to empty string
+        $apiKey = config('services.gemini.key', '');
+
+        if (empty($apiKey)) {
             Log::warning('TranslationService: GEMINI_API_KEY is missing. Returning original text.');
             return $text;
         }
@@ -26,43 +21,42 @@ class TranslationService
             return '';
         }
 
-        // Cache Key generation
-        $cacheKey = 'trans_' . md5($text . $targetLang);
+        // Hardcoded URL as requested, but using config variable for the key
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' . $apiKey;
 
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 60 * 60 * 24, function () use ($text) {
-            try {
-                // Simple prompt construction
-                $prompt = "Translate the following Turkish text to English. Return ONLY the translated text, no explanations, no quotes, no markdown:\n\n" . $text;
+        try {
+            // Log the attempt (masking key for security)
+            Log::info('Gemini Request Initiated to: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent');
 
-                $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                ])->post("{$this->apiUrl}?key={$this->apiKey}", [
-                            'contents' => [
-                                [
-                                    'parts' => [
-                                        ['text' => $prompt]
-                                    ]
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post($url, [
+                        'contents' => [
+                            [
+                                'parts' => [
+                                    ['text' => "Translate the following Turkish text to English. Return ONLY the translation, no extra commentary: \n\n" . $text]
                                 ]
-                            ],
-                            'generationConfig' => [
-                                'temperature' => 0.1,
                             ]
-                        ]);
+                        ]
+                    ]);
 
-                if ($response->failed()) {
-                    Log::error('Gemini Translation Failed', ['response' => $response->body()]);
-                    return $text;
+            if ($response->successful()) {
+                $translatedText = $response->json('candidates.0.content.parts.0.text');
+
+                if ($translatedText) {
+                    return trim($translatedText);
                 }
 
-                $data = $response->json();
-                $translatedText = $data['candidates'][0]['content']['parts'][0]['text'] ?? $text;
-
-                return trim($translatedText);
-
-            } catch (\Exception $e) {
-                Log::error('Gemini Translation Exception: ' . $e->getMessage());
+                Log::warning('Gemini Response was successful but returned no text candidate.', ['response' => $response->json()]);
                 return $text;
             }
-        });
+
+            Log::error('Gemini Error: ' . $response->body());
+            return $text;
+
+        } catch (\Exception $e) {
+            Log::error('Gemini Translation Exception: ' . $e->getMessage());
+            return $text;
+        }
     }
 }
